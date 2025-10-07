@@ -1,0 +1,10 @@
+.DS_Store
+.vscode/
+.idea/
+vendor/
+node_modules/
+.env
+dist/
+build/
+*.dropbox
+wp-content/uploads/

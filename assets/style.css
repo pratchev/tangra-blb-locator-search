@@ -1,0 +1,168 @@
+:root{
+  --tgfg-blue:#769bcc;
+  --tgfg-green:#9bcc76;
+  --tgfg-gray:#808285;
+  --tgfg-card:#ffffff;
+  --tgfg-border:#e5e7eb;
+  --tgfg-bg:#f2f6fb;
+  --tgfg-text:#0f172a;
+}
+/* Full-page light-blue background and neutralized theme wrappers */
+html, body { height:100%; margin:0; background:var(--tgfg-bg) !important; }
+#wrap_all, #main, .container_wrap, .container, .content, .entry-content, .avia-content, .main_color { background:transparent !important; }
+#main .container, #main .content, .container, .content, .entry-content-wrapper { padding:0 !important; }
+
+/* Layout */
+.tgfg-wrap{min-height:100vh; padding:24px 0; background:transparent;}
+.tgfg-center{max-width:960px; margin:0 auto; text-align:center;}
+
+/* Card */
+.tgfg-card{ background:var(--tgfg-card); border:1px solid var(--tgfg-border); border-radius:14px; padding:18px; text-align:left; }
+.tgfg-search-card{ margin:0 auto 0 auto; }
+
+/* Header */
+.tgfg-logo{max-width:350px; width:100%; height:auto; display:block; margin:40px auto 40px auto;}
+.tgfg-title{
+  margin:20px 0 20px 0 !important;
+  font-size:1.9rem !important;
+  font-weight:300 !important;              
+  letter-spacing:.2px !important;
+  color:var(--tgfg-gray) !important;
+  text-align:center;
+}
+
+/* Filters */
+.tgfg-search{ border:1px dashed var(--tgfg-border); border-radius:12px; padding:14px; margin-top:16px; }
+.tgfg-search summary{ cursor:pointer; font-weight:700; color:var(--tgfg-blue); }
+
+#tgfg-form .grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap:12px; margin-top:12px;
+}
+#tgfg-form label{ display:flex; flex-direction:column; font-weight:600; color:var(--tgfg-text); }
+#tgfg-form input, #tgfg-form select{
+  padding:10px; border:1px solid var(--tgfg-border); border-radius:10px; background:#fff;
+}
+#tgfg-form .actions{ display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap; }
+#tgfg-form .sort.sort-wide{ min-width:200px; }
+#tgfg-form .sort.sort-wide select{ width:100%; }
+
+/* Buttons */
+.tgfg-btn{
+  background:var(--tgfg-blue);
+  color:#fff; border:2px solid var(--tgfg-green);
+  border-radius:999px; padding:8px 16px; font-weight:700; cursor:pointer;
+  transition:all .15s ease;
+}
+.tgfg-btn:hover{ background:#fff; color:var(--tgfg-green); border-color:var(--tgfg-green); outline:none; }
+.tgfg-btn.ghost{ background:#fff; color:var(--tgfg-green); border:2px solid var(--tgfg-green); }
+.tgfg-btn.ghost:hover{ background:var(--tgfg-blue); color:#fff; border-color:var(--tgfg-green); }
+
+/* Results */
+.tgfg-cards{ margin-top:14px; display:grid; gap:10px;}
+.tgfg-card:not(.tgfg-search-card){ padding:12px; }
+.tgfg-line{
+  margin:2px 0;
+  display:flex; gap:8px; align-items:center; color:var(--tgfg-text);
+  line-height:1.25;
+}
+.tgfg-line.brand{ color:var(--tgfg-blue); font-weight:700; font-size:1.25em !important; margin-bottom:0.5rem !important;}
+
+/* Multiline address block */
+.tgfg-line.address{
+  align-items: flex-start;              /* top align icon with first line */
+}
+
+.tgfg-line.address .icon{
+  margin-top: 0px;                      /* nudge icon down a touch 2px ? */
+}
+
+.tgfg-address-link{
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
+}
+
+.tgfg-address-lines{
+  display: flex;
+  flex-direction: column;
+  gap: 0;                               /* compact lines */
+  line-height: 1.25;
+}
+
+.tgfg-address-lines .row{
+  margin: 0;
+  padding: 0;
+}
+
+/* Icons (gray) */
+.icon{
+  width:18px; height:18px; display:inline-block; flex:0 0 18px;
+  background-color:var(--tgfg-gray);
+  -webkit-mask-size: contain; mask-size: contain;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center;
+}
+.icon-franchisee{ -webkit-mask-image:url("./address-card.svg");  mask-image:url("./address-card.svg"); }
+.icon-location{ -webkit-mask-image:url("./location.svg"); mask-image:url("./location.svg"); }
+.icon-phone{    -webkit-mask-image:url("./phone.svg");    mask-image:url("./phone.svg"); }
+.icon-email{    -webkit-mask-image:url("./email.svg");    mask-image:url("./email.svg"); }
+.icon-distance{ -webkit-mask-image:url("./distance.svg");  mask-image:url("./distance.svg"); }
+
+/* Centered “locations found”, same size as Franchisee Name (1rem) */
+.tgfg-meta{ font-size:12px; color:var(--tgfg-gray); text-align:center; margin-bottom:5px; }
+
+/* Screen-reader utility */
+.sr{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  border:0!important;
+}
+
+/* Loading UI */
+.tgfg-loading{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin:10px 0;
+  color:var(--tgfg-gray);
+  font-weight:600;
+}
+
+.tgfg-loading .spinner{
+  width:32px;
+  height:32px;
+  border:3px solid var(--tgfg-border);
+  border-top-color: var(--tgfg-blue);
+  border-radius:50%;
+  animation: tgfg-spin 0.9s linear infinite;
+}
+
+@keyframes tgfg-spin { to { transform: rotate(360deg); } }
+
+/* Global loading state */
+.tgfg-wrap.is-loading #tgfg-loading{ display:flex; }
+.tgfg-wrap.is-loading #tgfg-results{ opacity:0.5; filter:blur(1px); transition: opacity .15s ease; }
+
+/* Prevent accidental clicks while loading */
+.tgfg-wrap.is-loading .tgfg-btn,
+.tgfg-wrap.is-loading .pg-btn {
+  pointer-events:none;
+  opacity:.6;
+}
+
+/* Pager with compact dropdown on the same line */
+.tgfg-pager{ display:flex; gap:10px; justify-content:center; align-items:center; margin-top:12px; flex-wrap:wrap; }
+.tgfg-pager .pg-btn{ padding:6px 10px; border-radius:10px; border:2px solid var(--tgfg-green); background:var(--tgfg-blue); color:#fff; font-weight:700; cursor:pointer; }
+.tgfg-pager .pg-btn[disabled]{ opacity:.5; cursor:not-allowed; }
+.tgfg-pager .pg-btn:hover{ background:#fff; color:var(--tgfg-green); }
+.tgfg-pager .pg-select{ padding:6px 10px; border:1px solid var(--tgfg-border); border-radius:10px; width:60px !important; vertical-align:middle !important; margin:0 0 0 0 !important;}
+
+.tgfg-footer{ margin-top:28px; color:var(--tgfg-gray); text-align:center; }

@@ -216,12 +216,12 @@ class Tangra_BLB_Locator_Search {
                       <input type="text" name="city"/>
                     </label>
                     <label>State
-                      <input type="text" name="state"/>
+                      <select name="state" id="tgfg-state"><option value="">All States</option></select>
                     </label>
                     <label>ZIP
-                      <input type="text" name="zip"/>
+                      <input type="text" name="zip" maxlength="10" pattern="[0-9\-]{1,10}" placeholder="e.g., 12345 or 12345-6789"/>
                     </label>
-                    <label>Distance (miles)
+                    <label>Distance from your current location
                       <input type="number" step="1" min="0" name="distance" placeholder="e.g., 25"/>
                     </label>
                     <label class="sort sort-wide">Sort by
@@ -392,7 +392,21 @@ class Tangra_BLB_Locator_Search {
         if($fran!==''){    $where .= " AND `Franchisee Name` LIKE %s ";$params[] = '%'.$wpdb->esc_like($fran).'%'; }
         if($city!==''){    $where .= " AND `City` LIKE %s ";           $params[] = '%'.$wpdb->esc_like($city).'%'; }
         if($state!==''){   $where .= " AND `State` LIKE %s ";          $params[] = '%'.$wpdb->esc_like($state).'%'; }
-        if($zip!==''){     $where .= " AND `ZIP` LIKE %s ";            $params[] = $zip.'%'; }
+        if($zip!==''){     
+            // Improved ZIP code search to handle various formats
+            $zip_clean = preg_replace('/[^0-9]/', '', $zip); // Remove non-numeric chars
+            if(strlen($zip_clean) >= 3) {
+                // Try exact match first, then prefix match, then match ZIP+4 format
+                $where .= " AND (`ZIP` = %s OR `ZIP` LIKE %s OR `ZIP` LIKE %s) ";
+                $params[] = $zip_clean; // exact match (e.g., "12345")
+                $params[] = $zip_clean.'%'; // prefix match (e.g., "12345*")
+                $params[] = $zip_clean.'-%'; // ZIP+4 format (e.g., "12345-*")
+            } else {
+                // For very short input, just do prefix match
+                $where .= " AND `ZIP` LIKE %s ";
+                $params[] = $zip_clean.'%';
+            }
+        }
 
         $allowedSort = array(
             'brand' => '`Brand`',
@@ -451,7 +465,8 @@ class Tangra_BLB_Locator_Search {
             'perPage'   => $per,
             'rows'      => $rows,
             'brands'    => $wpdb->get_col("SELECT DISTINCT `Brand` FROM `$view` ORDER BY `Brand` ASC"),
-            'countries' => $wpdb->get_col("SELECT DISTINCT `Country` FROM `$view` ORDER BY `Country` ASC")
+            'countries' => $wpdb->get_col("SELECT DISTINCT `Country` FROM `$view` ORDER BY `Country` ASC"),
+            'states'    => $wpdb->get_col("SELECT DISTINCT `State` FROM `$view` WHERE `State` IS NOT NULL AND `State` != '' ORDER BY `State` ASC")
         ));
     }
 

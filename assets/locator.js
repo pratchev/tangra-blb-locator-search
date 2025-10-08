@@ -157,7 +157,7 @@
         render(j.data.rows, j.data.total);
         pager(j.data.total);
 
-        const $b = $('#tgfg-brand'), $c = $('#tgfg-country');
+        const $b = $('#tgfg-brand'), $c = $('#tgfg-country'), $s = $('#tgfg-state');
         if($b.data('loaded')!=='1'){
           j.data.brands.forEach(v => $b.append($('<option/>').val(v).text(v)));
           $b.data('loaded','1');
@@ -165,6 +165,10 @@
         if($c.data('loaded')!=='1'){
           j.data.countries.forEach(v => $c.append($('<option/>').val(v).text(v)));
           $c.data('loaded','1');
+        }
+        if($s.data('loaded')!=='1'){
+          j.data.states.forEach(v => $s.append($('<option/>').val(v).text(v)));
+          $s.data('loaded','1');
         }
       })
       .catch(()=>{/* optionally show a toast */})
@@ -180,7 +184,9 @@
       state.franchisee = f.get('franchisee') || '';
       state.city       = f.get('city')       || '';
       state.state      = f.get('state')      || '';
-      state.zip        = f.get('zip')        || '';
+      // Clean ZIP input to remove non-numeric characters except dashes
+      const zipRaw     = f.get('zip')        || '';
+      state.zip        = zipRaw.replace(/[^0-9\-]/g, '');
       state.distance   = f.get('distance')   || '';
       state.sort       = f.get('sort')       || 'brand,franchisee_name';
       state.page       = 1;
@@ -194,6 +200,15 @@
         search();
       }
     });
+    
+    // Add real-time ZIP input formatting
+    $('#tgfg-form input[name="zip"]').on('input', function(){
+      const val = this.value.replace(/[^0-9\-]/g, '');
+      if(val !== this.value) {
+        this.value = val;
+      }
+    });
+    
     $('#tgfg-reset').on('click', function(){
       $('#tgfg-form')[0].reset();
       state.brand=state.country=state.franchisee=state.city=state.state=state.zip=state.distance='';

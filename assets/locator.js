@@ -10,6 +10,8 @@
     state: '',
     zip: '',
     distance: '', // miles
+    from: 'current',
+    nearbyCity: '',
     userLoc: null
   };
 
@@ -144,7 +146,10 @@
     const data = new FormData();
     data.append('action', 'tg_blbls_search');
     data.append('nonce', TG_BLBL.nonce);
-    ['brand','country','franchisee','city','state','zip','sort','distance'].forEach(k => data.append(k, state[k]||''));
+    ['brand','country','franchisee','city','state','zip','sort','distance','from','nearby_city'].forEach(k => {
+      const val = k === 'nearby_city' ? state.nearbyCity : (k === 'from' ? state.from : state[k]);
+      data.append(k, val || '');
+    });
     if(state.userLoc){ data.append('userLat', state.userLoc.lat); data.append('userLng', state.userLoc.lng); }
     data.append('page', state.page);
     data.append('perPage', state.perPage);
@@ -188,10 +193,13 @@
       const zipRaw     = f.get('zip')        || '';
       state.zip        = zipRaw.replace(/[^0-9\-]/g, '');
       state.distance   = f.get('distance')   || '';
+      state.from       = f.get('from')       || 'current';
+      state.nearbyCity = f.get('nearby_city') || '';
       state.sort       = f.get('sort')       || 'brand,franchisee_name';
       state.page       = 1;
 
-      if((state.distance || state.sort==='distance') && navigator.geolocation){
+      // Only get geolocation if using current location and distance/sort requires it
+      if(state.from === 'current' && (state.distance || state.sort==='distance') && navigator.geolocation){
         navigator.geolocation.getCurrentPosition(function(pos){
           state.userLoc = {lat: pos.coords.latitude, lng: pos.coords.longitude};
           search();
@@ -209,10 +217,23 @@
       }
     });
     
+    // Handle From dropdown change to show/hide Nearby City field
+    $('#tgfg-from').on('change', function(){
+      const val = $(this).val();
+      if(val === 'city'){
+        $('#tgfg-nearby-city-wrap').show();
+      } else {
+        $('#tgfg-nearby-city-wrap').hide();
+        $('#tgfg-nearby-city').val('');
+      }
+    });
+    
     $('#tgfg-reset').on('click', function(){
       $('#tgfg-form')[0].reset();
       state.brand=state.country=state.franchisee=state.city=state.state=state.zip=state.distance='';
+      state.from='current'; state.nearbyCity='';
       state.userLoc=null; state.sort='brand,franchisee_name'; state.page=1;
+      $('#tgfg-nearby-city-wrap').hide();
       search();
     });
   }

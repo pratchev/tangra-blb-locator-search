@@ -221,9 +221,24 @@ class Tangra_BLB_Locator_Search {
                     <label>ZIP
                       <input type="text" name="zip" maxlength="10" pattern="[0-9\-]{1,10}" placeholder="e.g., 12345 or 12345-6789"/>
                     </label>
-                    <label>Distance from your current location
+                  </div>
+                  <hr class="tgfg-separator"/>
+                  <div class="grid distance-row">
+                    <label>Distance (in miles)
                       <input type="number" step="1" min="0" name="distance" placeholder="e.g., 25"/>
                     </label>
+                    <label>From
+                      <select name="from" id="tgfg-from">
+                        <option value="current">Your Current Location</option>
+                        <option value="city">Nearby City</option>
+                      </select>
+                    </label>
+                    <label id="tgfg-nearby-city-wrap" style="display:none;">Nearby City
+                      <input type="text" name="nearby_city" id="tgfg-nearby-city" placeholder="Enter city name"/>
+                    </label>
+                  </div>
+                  <hr class="tgfg-separator"/>
+                  <div class="grid sort-row">
                     <label class="sort sort-wide">Sort by
                       <select name="sort" id="tgfg-sort">
                         <option value="brand,franchisee_name">Default (Brand, Franchisee)</option>
@@ -384,6 +399,8 @@ class Tangra_BLB_Locator_Search {
         $userLat= isset($_POST['userLat']) ? floatval($_POST['userLat']) : null;
         $userLng= isset($_POST['userLng']) ? floatval($_POST['userLng']) : null;
         $distanceMiles = isset($_POST['distance']) ? floatval($_POST['distance']) : 0;
+        $from   = isset($_POST['from']) ? sanitize_text_field($_POST['from']) : 'current';
+        $nearbyCity = isset($_POST['nearby_city']) ? sanitize_text_field($_POST['nearby_city']) : '';
 
         $where = " WHERE 1=1 ";
         $params = array();
@@ -423,13 +440,30 @@ class Tangra_BLB_Locator_Search {
                 FROM `$view` $where ORDER BY $order";
         $rows_all = $wpdb->get_results($wpdb->prepare($sql, $params), ARRAY_A);
 
+        // Determine the reference location for distance calculations
+        $refLat = null;
+        $refLng = null;
+        
+        if($from === 'city' && !empty($nearbyCity)){
+            // Geocode the nearby city
+            $cityGeo = $this->geocode_address($nearbyCity);
+            if($cityGeo){
+                $refLat = $cityGeo[0];
+                $refLng = $cityGeo[1];
+            }
+        } elseif($from === 'current' && !empty($userLat) && !empty($userLng)){
+            // Use current location
+            $refLat = $userLat;
+            $refLng = $userLng;
+        }
+
         $rows_filtered = array();
         foreach($rows_all as $r){
             $addr = $this->normalize_address($r);
-            if(!empty($userLat) && !empty($userLng) && $addr){
+            if(!empty($refLat) && !empty($refLng) && $addr){
                 $geo = $this->geocode_address($addr);
                 if($geo){
-                    $r['Distance'] = round($this->haversine_miles($userLat, $userLng, $geo[0], $geo[1]), 2);
+                    $r['Distance'] = round($this->haversine_miles($refLat, $refLng, $geo[0], $geo[1]), 2);
                 }
             }
             if($distanceMiles > 0){

@@ -43,10 +43,46 @@ html, body { height:100%; margin:0; background:var(--tgfg-bg) !important; }
 #tgfg-form label{ display:flex; flex-direction:column; font-weight:600; color:var(--tgfg-text); }
 #tgfg-form input, #tgfg-form select{
   padding:10px; border:1px solid var(--tgfg-border); border-radius:10px; background:#fff;
+  height:44px;
+  box-sizing:border-box;
 }
 #tgfg-form .actions{ display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap; }
-#tgfg-form .sort.sort-wide{ min-width:200px; }
-#tgfg-form .sort.sort-wide select{ width:100%; }
+
+/* Separator line */
+.tgfg-separator{
+  border:none;
+  border-top:1px solid var(--tgfg-border);
+  margin:16px 0 8px 0;
+}
+
+/* Distance row - 4 column grid on desktop, responsive on mobile */
+/* Fields are now in order: Distance, From, Nearby City */
+#tgfg-form .distance-row{
+  margin-top:8px;
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:12px;
+}
+
+@media (max-width: 768px) {
+  #tgfg-form .distance-row{
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+/* Sort row - 4 column grid on desktop, responsive on mobile */
+#tgfg-form .sort-row{
+  margin-top:8px;
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:12px;
+}
+
+@media (max-width: 768px) {
+  #tgfg-form .sort-row{
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
 
 /* Buttons */
 .tgfg-btn{

@@ -446,6 +446,7 @@ class Tangra_BLB_Locator_Search {
         // Determine the reference location for distance calculations
         $refLat = null;
         $refLng = null;
+        $skipDistanceFilter = false;
         
         if($from === 'city' && !empty($nearbyCity)){
             // Geocode the nearby city
@@ -454,6 +455,9 @@ class Tangra_BLB_Locator_Search {
                 $refLat = $cityGeo[0];
                 $refLng = $cityGeo[1];
             }
+        } elseif($from === 'city' && empty($nearbyCity)){
+            // If "Choose a City" is selected but city is blank, skip distance filtering
+            $skipDistanceFilter = true;
         } elseif($from === 'current' && !empty($userLat) && !empty($userLng)){
             // Use current location
             $refLat = $userLat;
@@ -469,7 +473,10 @@ class Tangra_BLB_Locator_Search {
                     $r['Distance'] = round($this->haversine_miles($refLat, $refLng, $geo[0], $geo[1]), 2);
                 }
             }
-            if($distanceMiles > 0){
+            if($skipDistanceFilter){
+                // Skip distance filtering when city option is selected but city is blank
+                $rows_filtered[] = $r;
+            } elseif($distanceMiles > 0){
                 if(isset($r['Distance']) && $r['Distance'] <= $distanceMiles){
                     $rows_filtered[] = $r;
                 }

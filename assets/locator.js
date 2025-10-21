@@ -9,7 +9,7 @@
     city: '',
     state: '',
     zip: '',
-    distance: '', // miles
+    distance: '25', // miles
     from: 'current',
     nearbyCity: '',
     userLoc: null
@@ -230,10 +230,12 @@
     
     $('#tgfg-reset').on('click', function(){
       $('#tgfg-form')[0].reset();
-      state.brand=state.country=state.franchisee=state.city=state.state=state.zip=state.distance='';
+      state.brand=state.country=state.franchisee=state.city=state.state=state.zip='';
+      state.distance='25';
       state.from='current'; state.nearbyCity='';
-      state.userLoc=null; state.sort='brand,franchisee_name'; state.page=1;
+      state.userLoc=null; state.sort='distance'; state.page=1;
       $('#tgfg-nearby-city-wrap').hide();
+      $('input[name="distance"]').val('25');
       search();
     });
   }

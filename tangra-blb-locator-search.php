@@ -199,9 +199,25 @@ class Tangra_BLB_Locator_Search {
               <?php endif; ?>
               <div class="tgfg-title">Find BLB Locations</div>
 
-              <details class="tgfg-search" open>
-                <summary>Search Filters</summary>
-                <form id="tgfg-form">
+              <form id="tgfg-form">
+                <div class="grid distance-row">
+                  <label>Distance (miles)
+                    <input type="number" step="1" min="0" name="distance" value="25" placeholder="e.g., 25"/>
+                  </label>
+                  <label>&nbsp;
+                    <select name="from" id="tgfg-from">
+                      <option value="current">Near Current Location</option>
+                      <option value="city">Choose a City</option>
+                    </select>
+                  </label>
+                  <label id="tgfg-nearby-city-wrap" style="display:none;">City
+                    <input type="text" name="nearby_city" id="tgfg-nearby-city" placeholder="Enter city name"/>
+                  </label>
+                </div>
+                <hr class="tgfg-separator"/>
+
+                <details class="tgfg-search">
+                  <summary>Filters</summary>
                   <div class="grid">
                     <label>Brand
                       <select name="brand" id="tgfg-brand"><option value="">All Brands</option></select>
@@ -212,7 +228,7 @@ class Tangra_BLB_Locator_Search {
                     <label>Franchisee Name
                       <input type="text" name="franchisee"/>
                     </label>
-                    <label>City
+                    <label>Franchisee City
                       <input type="text" name="city"/>
                     </label>
                     <label>State
@@ -222,41 +238,28 @@ class Tangra_BLB_Locator_Search {
                       <input type="text" name="zip" maxlength="10" pattern="[0-9\-]{1,10}" placeholder="e.g., 12345 or 12345-6789"/>
                     </label>
                   </div>
-                  <hr class="tgfg-separator"/>
-                  <div class="grid distance-row">
-                    <label>Distance (in miles)
-                      <input type="number" step="1" min="0" name="distance" placeholder="e.g., 25"/>
-                    </label>
-                    <label>From
-                      <select name="from" id="tgfg-from">
-                        <option value="current">Your Current Location</option>
-                        <option value="city">Nearby City</option>
-                      </select>
-                    </label>
-                    <label id="tgfg-nearby-city-wrap" style="display:none;">Nearby City
-                      <input type="text" name="nearby_city" id="tgfg-nearby-city" placeholder="Enter city name"/>
-                    </label>
-                  </div>
-                  <hr class="tgfg-separator"/>
-                  <div class="grid sort-row">
-                    <label class="sort sort-wide">Sort by
-                      <select name="sort" id="tgfg-sort">
-                        <option value="brand,franchisee_name">Default (Brand, Franchisee)</option>
-                        <option value="brand">Brand</option>
-                        <option value="franchisee_name">Franchisee Name</option>
-                        <option value="city">City</option>
-                        <option value="state">State</option>
-                        <option value="zip">ZIP</option>
-                        <option value="distance">Distance (Nearest)</option>
-                      </select>
-                    </label>
-                  </div>
-                  <div class="actions">
-                    <button class="tgfg-btn" type="submit">Search</button>
-                    <button class="tgfg-btn ghost" type="button" id="tgfg-reset">Reset</button>
-                  </div>
-                </form>
-              </details>
+                </details>
+
+                <hr class="tgfg-separator"/>
+                <div class="grid sort-row">
+                  <label class="sort sort-wide">Sort by
+                    <select name="sort" id="tgfg-sort">
+                      <option value="distance">Distance (Nearest)</option>
+                      <option value="brand,franchisee_name">Brand, Franchisee</option>
+                      <option value="brand">Brand</option>
+                      <option value="franchisee_name">Franchisee Name</option>
+                      <option value="city">City</option>
+                      <option value="state">State</option>
+                      <option value="zip">ZIP</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="actions">
+                  <button class="tgfg-btn" type="submit">Search</button>
+                  <button class="tgfg-btn ghost" type="button" id="tgfg-reset">Reset</button>
+                </div>
+              </form>
             </div>
 
             <div id="tgfg-results-meta" class="tgfg-meta"></div>

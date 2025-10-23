@@ -52,9 +52,8 @@
  //     }
 
   // Build multiline address: 
-  // Line 1: Address
-  // Line 2: City, State ZIP
-  // Line 3: Country
+  // Line 1: City, State (no ZIP)
+  // Line 2: Country
   (function(){
     const addr1   = (r.Address || '').trim();
     const city    = (r.City || '').trim();
@@ -62,21 +61,19 @@
     const zip     = (r.ZIP || '').trim();
     const country = (r.Country || '').trim();
 
-    // City, State ZIP composition
-    const line2Parts = [];
-    if (city) line2Parts.push(city);
-    const stateZip = [state, zip].filter(Boolean).join(' ');
-    if (stateZip) line2Parts.push(stateZip);
-    const line2 = line2Parts.join(', ');
+    // City, State composition (no ZIP)
+    const line1Parts = [];
+    if (city) line1Parts.push(city);
+    if (state) line1Parts.push(state);
+    const line1 = line1Parts.join(', ');
 
     const lines = [];
-    if (addr1)   lines.push(addr1);
-    if (line2)   lines.push(line2);
+    if (line1)   lines.push(line1);
     if (country) lines.push(country);
 
     // Only render if at least one line exists
     if (lines.length) {
-      const mapTarget = [addr1, line2, country].filter(Boolean).join(', ');
+      const mapTarget = [addr1, line1, country].filter(Boolean).join(', ');
       const $lines = $('<div class="tgfg-address-lines"/>');
       lines.forEach(l => $lines.append($('<div class="row"/>').text(l)));
 
@@ -217,24 +214,12 @@
       }
     });
     
-    // Handle From dropdown change to show/hide Nearby City field
-    $('#tgfg-from').on('change', function(){
-      const val = $(this).val();
-      if(val === 'city'){
-        $('#tgfg-nearby-city-wrap').show();
-      } else {
-        $('#tgfg-nearby-city-wrap').hide();
-        $('#tgfg-nearby-city').val('');
-      }
-    });
-    
     $('#tgfg-reset').on('click', function(){
       $('#tgfg-form')[0].reset();
       state.brand=state.country=state.franchisee=state.city=state.state=state.zip='';
       state.distance='25';
       state.from='current'; state.nearbyCity='';
       state.userLoc=null; state.sort='distance'; state.page=1;
-      $('#tgfg-nearby-city-wrap').hide();
       $('input[name="distance"]').val('25');
       search();
     });

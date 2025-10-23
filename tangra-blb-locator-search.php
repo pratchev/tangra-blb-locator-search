@@ -204,13 +204,13 @@ class Tangra_BLB_Locator_Search {
                   <label>Distance (miles)
                     <input type="number" step="1" min="0" name="distance" value="25" placeholder="e.g., 25"/>
                   </label>
-                  <label>&nbsp;
-                    <select name="from" id="tgfg-from">
-                      <option value="current">Near Current Location</option>
-                      <option value="city">Choose a City</option>
-                    </select>
-                  </label>
-                  <label id="tgfg-nearby-city-wrap" style="display:none;">City
+                  <div class="tgfg-radio-group">
+                    <label><input type="radio" name="from" value="current" id="tgfg-from-current" checked/> Near Current Location</label>
+                  </div>
+                  <div class="tgfg-radio-group">
+                    <label><input type="radio" name="from" value="city" id="tgfg-from-city"/> Choose a City</label>
+                  </div>
+                  <label>City
                     <input type="text" name="nearby_city" id="tgfg-nearby-city" placeholder="Enter city name"/>
                   </label>
                 </div>
